@@ -1,0 +1,77 @@
+{
+  "name": "user-management-smiels",
+  "version": "0.0.1",
+  "description": "user management api for smiels",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10.16"
+  },
+  "scripts": {
+    "build": "lb-tsc",
+    "pretest": "npm run rebuild",
+    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "posttest": "npm run lint",
+    "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
+    "premigrate": "npm run build",
+    "migrate": "node ./dist/migrate",
+    "preopenapi-spec": "npm run build",
+    "openapi-spec": "node ./dist/openapi-spec",
+    "rebuild": "npm run clean && npm run build",
+    "prestart": "npm run rebuild",
+    "start": "node -r source-map-support/register .",
+    "clean": "lb-clean dist *.tsbuildinfo .eslintcache"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "Sohaib Ahsan <info@forenax.com>",
+  "license": "Forenax Technologies",
+  "files": [
+    "README.md",
+    "dist",
+    "src",
+    "!*/__tests__"
+  ],
+  "dependencies": {
+    "@loopback/authentication": "^7.0.4",
+    "@loopback/authentication-jwt": "^0.7.4",
+    "@loopback/authorization": "^0.7.4",
+    "@loopback/boot": "^3.1.1",
+    "@loopback/context": "^3.13.1",
+    "@loopback/core": "^2.13.0",
+    "@loopback/health": "^0.6.1",
+    "@loopback/metrics": "^0.5.1",
+    "@loopback/openapi-v3": "^5.1.1",
+    "@loopback/repository": "^3.2.1",
+    "@loopback/rest": "^9.1.0",
+    "@loopback/rest-explorer": "^3.0.4",
+    "@loopback/security": "^0.3.4",
+    "@loopback/service-proxy": "^3.0.4",
+    "@sendgrid/mail": "^7.4.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jest": "^26.0.15",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/yaml": "^1.9.7",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "loopback-connector-postgresql": "^5.2.1",
+    "tslib": "^2.0.0",
+    "yaml": "^1.10.0"
+  },
+  "devDependencies": {
+    "@loopback/build": "^6.2.7",
+    "@loopback/eslint-config": "^10.0.3",
+    "@loopback/testlab": "^3.2.9",
+    "@types/node": "^10.17.45",
+    "eslint": "^7.13.0",
+    "source-map-support": "^0.5.19",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "~4.0.5"
+  }
+}

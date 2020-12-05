@@ -1,0 +1,10 @@
+{
+    "name": "UserManagement_SMIELS",
+    "connector": "postgresql",
+    "url": "postgres://smiels:F4d1a6e0@localhost/UserManagement_SMIELS",
+    "host": "localhost",
+    "port": 5432,
+    "user": "smiels",
+    "password": "F4d1a6e0",
+    "database": "UserManagement_SMIELS"
+}
