@@ -133,4 +133,15 @@ export class UserManagementService {
     }
 
   }
+
+  // update password
+
+  async resetPassword(userId: string, password: string) {
+    const passwordHash = await this.passwordHasher.hashPassword(password);
+    return this.userRepository
+      .userCredentials(userId)
+      .patch({password: passwordHash});
+
+  }
+
 }

@@ -13,10 +13,10 @@ export class UserWithPassword extends User {
     required: true,
     jsonSchema: {
       minLength: 8,
-      maxLength: 40,
+      maxLength: 50,
       errorMessage: {
         minLength: 'password should be atleast 8 characters',
-        maxLength: 'password should not exceed 40 characters'
+        maxLength: 'password should not exceed 50 characters'
       },
     },
   })
