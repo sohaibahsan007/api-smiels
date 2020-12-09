@@ -40,8 +40,6 @@ export class UserManagementApp extends BootMixin(
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
-
-
     this.sequence(MyAuthenticationSequence);
     // Set up the custom sequence
     this.sequence(MyMiddlewareSequence);

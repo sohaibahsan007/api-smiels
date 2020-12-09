@@ -49,7 +49,7 @@ export class CompanyAddressDetailController {
     return this.companyRepository.addressDetail(this.currentUserProfile.companyId).find(filter);
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.CompanyCreate]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.CompanyUpdate]}})
   @post('/company/address-detail', {
     responses: {
       '200': {

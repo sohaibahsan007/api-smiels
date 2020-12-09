@@ -37,7 +37,7 @@ export const SignupRequestBody = {
 export class SignupController {
   constructor(
     @inject(CompanyServicesBindings.SIGN_UP)
-    protected singupService: SignupService,
+    protected signupService: SignupService,
     @inject(CompanyServicesBindings.COMPANY_MANAGEMENT)
     protected companyService: CompanyManagementService,
   ) { }
@@ -55,13 +55,13 @@ export class SignupController {
   async sendConfirmationEmail(
     @requestBody(SignupRequestBody) body: Signup
   ): Promise<void> {
-    await this.singupService.sendConfirmationEmail(body);
+    await this.signupService.sendConfirmationEmail(body);
   }
 
 
   /// get user info token
 
-  @get('/singup/{token}', {
+  @get('/signup/{token}', {
     responses: {
       '200': {
         description: 'Signup Info from Token',
@@ -74,12 +74,12 @@ export class SignupController {
   async verifyConfirmation(
     @param.path.string('token') token: string,
   ): Promise<Signup> {
-    return this.singupService.verifyConfirmation(token);
+    return this.signupService.verifyConfirmation(token);
   }
 
 
   // validate sub domain.
-  @get('/singup/verifydomain/{subDomain}', {
+  @get('/signup/verifydomain/{subDomain}', {
     responses: {
       '200': {
         description: 'Validate SubDomain',
@@ -97,7 +97,7 @@ export class SignupController {
 
   /// create user and company from verification
 
-  @post('/singup/company', {
+  @post('/signup/company', {
     responses: {
       '200': {
         description: 'Company model instance',

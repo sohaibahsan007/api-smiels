@@ -7,6 +7,7 @@ export class EmailService {
   }
   async sendMail(mailObj: Email) {
     try {
+      mailObj.subject = environment.isDevelopment ? 'Dev-' + mailObj.subject : mailObj.subject;
       await sgMail.send(mailObj);
     } catch (error) {
       console.error(error);

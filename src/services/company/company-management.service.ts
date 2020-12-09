@@ -18,7 +18,7 @@ export class CompanyManagementService {
     @inject(UserServiceBindings.USER_MANAGEMENT)
     private userManagementService: UserManagementService,
     @inject(CompanyServicesBindings.SIGN_UP)
-    private singupService: SignupService,
+    private signupService: SignupService,
     @inject(MultiTenancyBindings.CURRENT_TENANT, {optional: true})
     private tenant?: Tenant
   ) { }
@@ -26,7 +26,7 @@ export class CompanyManagementService {
 
   async validateInfo(company: NewCompanyRequest) {
 
-    const verifyInviteToken = await this.singupService.verifyConfirmation(company.inviteToken);
+    const verifyInviteToken = await this.signupService.verifyConfirmation(company.inviteToken);
     if (!verifyInviteToken) {
       throw new HttpErrors.Conflict('invite is expired.');
     }

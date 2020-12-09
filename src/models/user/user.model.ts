@@ -28,21 +28,21 @@ export class User extends Entity {
   @property({
     type: 'string',
     required: true,
-    length: 70,
+    length: 254,
     index: {unique: true},
     jsonSchema: {
       format: 'email',
       minLength: 4,
-      maxLength: 70,
+      maxLength: 254,
       transform: ['toLowerCase'],
       errorMessage: {
         minLength: 'Email should be at least 4 characters.',
-        maxLength: 'Email should not exceed 70 characters.',
+        maxLength: 'Email should not exceed 254 characters.',
       }
     },
     postgresql: {
       dataType: 'character varying',
-      dataLength: 70,
+      dataLength: 254,
       dataPrecision: null,
       dataScale: null,
       nullable: 'NO',

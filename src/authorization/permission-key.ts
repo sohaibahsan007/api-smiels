@@ -16,7 +16,7 @@ export const enum PermissionKey {
   CompanyCreate = 'CompanyC',
   CompanyRead = 'CompanyR',
   CompanyReadAll = 'CompanyRA',
-  CompanyUpdate = 'CompanyUpdate',
+  CompanyUpdate = 'CompanyU',
   CompanyUpdateAll = 'CompanyUA',
-  CompanyDelete = 'CompanyDelete',
+  CompanyDelete = 'CompanyD',
 }

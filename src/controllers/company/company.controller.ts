@@ -5,6 +5,12 @@ import {
   CountSchema,
   Filter,
 
+
+
+  FilterBuilder,
+
+
+
   repository,
   Where
 } from '@loopback/repository';
@@ -84,7 +90,7 @@ export class CompanyController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Company, {partial: true, exclude: ['joinDate']}),
+          schema: getModelSchemaRef(Company, {partial: true, exclude: ['id', 'subDomain', 'currencyCode', 'emailVerified', 'joinDate']}),
         },
       },
     })
@@ -111,14 +117,16 @@ export class CompanyController {
     @inject(SecurityBindings.USER)
     currentUserProfile: UserProfile,
   ): Promise<Company> {
-    return this.companyRepository.findById(currentUserProfile.companyId);
+    const builder = new FilterBuilder<Company>().include({relation: 'addressDetail'}).build();
+    return this.companyRepository.findById(currentUserProfile.companyId, builder);
   }
 
   @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.CompanyUpdate]}})
   @patch('/company', {
     responses: {
-      '204': {
-        description: 'Company PATCH success',
+      '200': {
+        description: 'Company PATCH success count',
+        content: {'application/json': {schema: CountSchema}},
       },
     },
   })
@@ -126,14 +134,15 @@ export class CompanyController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Company, {partial: true, exclude: ['joinDate']}),
+          schema: getModelSchemaRef(Company, {partial: true, exclude: ['id', 'subDomain', 'currencyCode', 'emailVerified', 'joinDate']}),
         },
       },
     })
     company: Company,
     @inject(SecurityBindings.USER)
     currentUserProfile: UserProfile,
-  ): Promise<void> {
+  ): Promise<Count> {
     await this.companyRepository.updateById(currentUserProfile.companyId, company);
+    return {count: 1};
   }
 }

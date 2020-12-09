@@ -69,20 +69,20 @@ export class Company extends Entity {
   @property({
     type: 'string',
     required: true,
-    length: 70,
+    length: 254,
     jsonSchema: {
       format: 'email',
       minLength: 4,
-      maxLength: 70,
+      maxLength: 254,
       transform: ['toLowerCase'],
       errorMessage: {
         minLength: 'Email should be at least 4 characters.',
-        maxLength: 'Email should not exceed 70 characters.',
+        maxLength: 'Email should not exceed 254 characters.',
       }
     },
     postgresql: {
       dataType: 'character varying',
-      dataLength: 70,
+      dataLength: 254,
       dataPrecision: null,
       dataScale: null,
       nullable: 'NO',
@@ -98,9 +98,9 @@ export class Company extends Entity {
     type: 'string',
     length: 45,
     jsonSchema: {
-      minLength: 4,
+      minLength: 1,
       maxLength: 45,
-      errorMessage: 'Registration Number should be between 04 and 45 characters.',
+      errorMessage: 'Registration Number should be between 1 and 45 characters.',
     },
     postgresql: {
       dataType: 'character varying',
@@ -116,9 +116,9 @@ export class Company extends Entity {
     type: 'string',
     length: 100,
     jsonSchema: {
-      minLength: 4,
+      minLength: 1,
       maxLength: 100,
-      errorMessage: 'Industry Type should be between 04 and 100 characters.',
+      errorMessage: 'Industry Type should be between 1 and 100 characters.',
     },
     postgresql: {
       dataType: 'character varying',
@@ -158,7 +158,7 @@ export class Company extends Entity {
     type: 'string',
     length: 30,
     jsonSchema: {
-      minLength: 4,
+      minLength: 0,
       maxLength: 30,
       errorMessage: 'VAT Number should be between 4 and 30 characters.',
     },
