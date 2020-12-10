@@ -32,7 +32,7 @@ export class CompanyUserController {
     @inject(SecurityBindings.USER) protected currentUserProfile: UserProfile,
   ) { }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.Support, PermissionKey.UserReadAll]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserReadAll]}})
   @get('/company/users', {
     responses: {
       '200': {
@@ -51,7 +51,7 @@ export class CompanyUserController {
     return this.companyRepository.users(this.currentUserProfile.companyId).find(filter);
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.Support, PermissionKey.UserCreate]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserCreate]}})
   @post('/company/users', {
     responses: {
       '200': {
@@ -75,7 +75,7 @@ export class CompanyUserController {
     return this.companyRepository.users(this.currentUserProfile.companyId).create(user);
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.Support, PermissionKey.UserUpdate]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserUpdate]}})
   @patch('/company/users', {
     responses: {
       '200': {
@@ -102,7 +102,7 @@ export class CompanyUserController {
     return this.companyRepository.users(this.currentUserProfile.companyId).patch(user, where);
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.Support, PermissionKey.UserDelete]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserDelete]}})
   @del('/company/users/{id}', {
     responses: {
       '200': {
