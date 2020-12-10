@@ -55,7 +55,6 @@ export class JWTService implements TokenService {
         'Error generating token : userProfile is null',
       );
     }
-    console.log(userProfile.permissions);
     const userInfoForToken = {
       id: userProfile[securityId],
       name: userProfile.name,
