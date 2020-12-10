@@ -19,10 +19,12 @@ import {
 } from '@loopback/rest';
 import {SecurityBindings, UserProfile} from '@loopback/security';
 import {PermissionKey} from '../../authorization';
+import {UserServiceBindings} from '../../keys';
 import {
-  User
+  User, UserWithPassword
 } from '../../models';
 import {CompanyRepository} from '../../repositories';
+import {UserManagementService} from '../../services';
 
 // parent authenticate.
 @authenticate('jwt')
@@ -30,6 +32,8 @@ export class CompanyUserController {
   constructor(
     @repository(CompanyRepository) protected companyRepository: CompanyRepository,
     @inject(SecurityBindings.USER) protected currentUserProfile: UserProfile,
+    @inject(UserServiceBindings.USER_MANAGEMENT)
+    protected userManagementService: UserManagementService,
   ) { }
 
   @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserReadAll]}})
@@ -64,15 +68,17 @@ export class CompanyUserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {
+          schema: getModelSchemaRef(UserWithPassword, {
             title: 'NewUserInCompany',
             exclude: ['id', 'companyId', 'isAdmin', 'emailVerified', 'joinDate', 'username', 'isDeleted'],
           }),
         },
       },
-    }) user: Omit<User, 'id'>,
+    }) user: UserWithPassword,
   ): Promise<User> {
-    return this.companyRepository.users(this.currentUserProfile.companyId).create(user);
+    user.companyId = this.currentUserProfile.companyId;
+    const newuser = await this.userManagementService.createUser(user);
+    return newuser;
   }
 
   @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserUpdate]}})

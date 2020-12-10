@@ -164,6 +164,12 @@ export class User extends Entity {
   @hasOne(() => UserCredentials)
   userCredentials: UserCredentials;
 
+  @property({
+    type: 'number',
+    required: true,
+  })
+  roleId: number;
+
   constructor(data?: Partial<User>) {
     super(data);
   }

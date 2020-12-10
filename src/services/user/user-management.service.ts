@@ -69,6 +69,15 @@ export class UserManagementService {
     // pass the valid user.
     return foundUser;
   }
+
+  async verifyNewUserRequest(user: UserWithPassword) {
+    const foundUser = await this.userRepository.findOne({
+      where: {email: user.email.toLowerCase()},
+    });
+    if (foundUser) {
+      throw new HttpErrors.Conflict('User with this Email already exist!.');
+    }
+  }
   async convertToUserProfile(tenantId: string, user: User, roles: (string | undefined)[]): Promise<UserProfile> {
     // since first name and lastName are optional, no error is thrown if not provided
     let userName = '';
@@ -89,6 +98,8 @@ export class UserManagementService {
   }
 
   async createUser(userWithPassword: UserWithPassword): Promise<User> {
+    await this.verifyNewUserRequest(userWithPassword);
+
     userWithPassword.joinDate = new Date();
     userWithPassword.username = userWithPassword.email.toLowerCase();
     userWithPassword.email = userWithPassword.email.toLowerCase();
@@ -103,14 +114,20 @@ export class UserManagementService {
     );
     user.id = user.id.toString();
     await this.userRepository.userCredentials(user.id).create({password});
+
+    // add roles to newly created user
+    await this.createUserRolesByRoleId(user.id, user.roleId);
+
     return user;
   }
 
   // assign roles to users using Roles table which is linked to RolePermission
   // you need to pass roleId and userId.
-  async createUserRolesByRoleId(userId: string, roleId: number) {
+  private async createUserRolesByRoleId(userId: string, roleId: number) {
 
     try {
+
+      await this.userRolesRepository.deleteAll({userId})
       // get all role permissions with sub app feature id
       const rolepersmission = await this.rolePermissionsRepository.find(
         {

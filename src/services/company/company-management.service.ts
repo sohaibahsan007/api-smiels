@@ -77,9 +77,8 @@ export class CompanyManagementService {
       user.isAdmin = true;
       user.email = email;
       user.emailVerified = true;
-      const newuser = await this.userManagementService.createUser(user);
-      // assign all the rights to the user
-      await this.userManagementService.createUserRolesByRoleId(newuser.id, 1);
+      user.roleId = 1;
+      await this.userManagementService.createUser(user);
       return newcompany;
     } catch (error) {
       await this.companyRepository.deleteById(newcompany.id);
