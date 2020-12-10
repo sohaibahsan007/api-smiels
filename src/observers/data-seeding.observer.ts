@@ -7,6 +7,7 @@ import {
 } from '@loopback/core';
 import {repository} from '@loopback/repository';
 import * as _ from 'lodash';
+import {PermissionKey} from '../authorization';
 import {AppFeaturesOneSRepository, AppFeaturesRepository, RolePermissionsRepository, RolesRepository} from '../repositories';
 @lifeCycleObserver('')
 export class DataSeedingObserver implements LifeCycleObserver {
@@ -45,32 +46,32 @@ export class DataSeedingObserver implements LifeCycleObserver {
         isActive: true,
         appFeaturesOneS: [
           {
-            id: 'UserC',
+            id: PermissionKey.UserCreate,
             subFeatureName: 'User Create',
             isActive: true,
           },
           {
-            id: 'UserR',
+            id: PermissionKey.UserRead,
             subFeatureName: 'User Read',
             isActive: true,
           },
           {
-            id: 'UserRA',
+            id: PermissionKey.UserReadAll,
             subFeatureName: 'User Read All',
             isActive: true,
           },
           {
-            id: 'UserU',
+            id: PermissionKey.UserUpdate,
             subFeatureName: 'User Update',
             isActive: true,
           },
           {
-            id: 'UserUA',
+            id: PermissionKey.UserUpdateAll,
             subFeatureName: 'User Update All',
             isActive: true,
           },
           {
-            id: 'UserD',
+            id: PermissionKey.UserDelete,
             subFeatureName: 'User Delete',
             isActive: true,
           }
@@ -82,32 +83,32 @@ export class DataSeedingObserver implements LifeCycleObserver {
         isActive: true,
         appFeaturesOneS: [
           {
-            id: 'CompanyC',
+            id: PermissionKey.CompanyCreate,
             subFeatureName: 'Company Create',
             isActive: true,
           },
           {
-            id: 'CompanyR',
+            id: PermissionKey.CompanyRead,
             subFeatureName: 'Company Read',
             isActive: true,
           },
           {
-            id: 'CompanyRA',
+            id: PermissionKey.CompanyReadAll,
             subFeatureName: 'Company Read All',
             isActive: true,
           },
           {
-            id: 'CompanyU',
+            id: PermissionKey.CompanyUpdate,
             subFeatureName: 'Company Update',
             isActive: true,
           },
           {
-            id: 'CompanyUA',
+            id: PermissionKey.CompanyUpdateAll,
             subFeatureName: 'Company Update All',
             isActive: true,
           },
           {
-            id: 'CompanyD',
+            id: PermissionKey.CompanyDelete,
             subFeatureName: 'Company Delete',
             isActive: true,
           }
@@ -137,35 +138,31 @@ export class DataSeedingObserver implements LifeCycleObserver {
         name: 'Admin',
         rolePermissions: [
           {
-            appFeaturesOneSId: 'UserC',
+            appFeaturesOneSId: PermissionKey.UserCreate,
           },
           {
-            appFeaturesOneSId: 'UserR',
-
+            appFeaturesOneSId: PermissionKey.UserRead,
           },
           {
-            appFeaturesOneSId: 'UserRA',
-
+            appFeaturesOneSId: PermissionKey.UserReadAll,
           },
           {
-            appFeaturesOneSId: 'UserU',
-
+            appFeaturesOneSId: PermissionKey.UserUpdate,
           },
           {
-            appFeaturesOneSId: 'UserUA',
-
+            appFeaturesOneSId: PermissionKey.UserUpdateAll,
           },
           {
-            appFeaturesOneSId: 'UserD',
-
+            appFeaturesOneSId: PermissionKey.UserDelete,
           },
           {
-            appFeaturesOneSId: 'CompanyR',
-
+            appFeaturesOneSId: PermissionKey.CompanyRead,
           },
           {
-            appFeaturesOneSId: 'CompanyU',
-
+            appFeaturesOneSId: PermissionKey.CompanyUpdate,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.MyProfile,
           }
         ]
       }

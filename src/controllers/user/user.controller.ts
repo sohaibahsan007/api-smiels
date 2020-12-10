@@ -19,6 +19,7 @@ import {User, UserWithPassword} from '../../models';
 import {UserRepository} from '../../repositories';
 import {UserManagementService} from '../../services';
 
+
 export class UserController {
   constructor(
     @repository(UserRepository)
@@ -27,7 +28,7 @@ export class UserController {
     protected userManagementService: UserManagementService,
   ) { }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserRead]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.MyProfile]}})
   @get('/users/profile', {
     responses: {
       '200': {
@@ -47,7 +48,7 @@ export class UserController {
     return this.userRepository.findById(currentUserProfile[securityId]);
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserUpdate]}})
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.MyProfile]}})
   @patch('/user/{id}', {
     responses: {
       '200': {

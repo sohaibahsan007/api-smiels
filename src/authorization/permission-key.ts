@@ -3,7 +3,10 @@ export const enum PermissionKey {
   // support permissions
   Support = 'Support',
 
-  // permission keys for user module
+  // myprofile permissions
+  MyProfile = 'ProfileRU',
+
+  // permission keys for Company User module
   UserCreate = 'UserC',
   UserRead = 'UserR',
   UserReadAll = 'UserRA',
