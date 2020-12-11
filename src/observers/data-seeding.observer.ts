@@ -165,6 +165,51 @@ export class DataSeedingObserver implements LifeCycleObserver {
             appFeaturesOneSId: PermissionKey.MyProfile,
           }
         ]
+      },
+      {
+        id: 2,
+        name: 'Inventory Manager',
+        rolePermissions: [
+          {
+            appFeaturesOneSId: PermissionKey.UserCreate,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.UserRead,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.UserReadAll,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.UserUpdate,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.UserUpdateAll,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.UserDelete,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.CompanyRead,
+          },
+          {
+            appFeaturesOneSId: PermissionKey.MyProfile,
+          }
+        ]
+      },
+      {
+        id: 3,
+        name: 'Inventory Clerk',
+        rolePermissions: []
+      },
+      {
+        id: 4,
+        name: 'Sales Manager',
+        rolePermissions: []
+      },
+      {
+        id: 5,
+        name: 'Sales Person',
+        rolePermissions: []
       }
     ];
 

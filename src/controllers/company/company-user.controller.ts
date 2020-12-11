@@ -4,14 +4,13 @@ import {
   Count,
   CountSchema,
   Filter,
-  repository,
-  Where
+  repository
 } from '@loopback/repository';
 import {
   del,
   get,
   getModelSchemaRef,
-  getWhereSchemaFor,
+
   param,
   patch,
   post,
@@ -88,8 +87,8 @@ export class CompanyUserController {
     return newuser;
   }
 
-  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserUpdate]}})
-  @patch('/company/users', {
+  @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserUpdateAll]}})
+  @patch('/company/users/{id}', {
     responses: {
       '200': {
         description: 'Company.User PATCH success count',
@@ -101,18 +100,25 @@ export class CompanyUserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {
-            exclude: ['id', 'companyId', 'isAdmin', 'email', 'emailVerified', 'joinDate', 'username', 'isDeleted', 'userRoles', 'userCredentials'],
+          schema: getModelSchemaRef(UserWithPassword, {
+            exclude: ['companyId', 'isAdmin', 'email', 'emailVerified', 'joinDate', 'username', 'isDeleted', 'userRoles', 'userCredentials'],
             partial: true
           }
           ),
         },
       },
     })
-    user: Partial<User>,
-    @param.query.object('where', getWhereSchemaFor(User)) where?: Where<User>,
+    user: Partial<UserWithPassword>,
+    @param.path.string('id') id: string
   ): Promise<Count> {
-    return this.companyRepository.users(this.currentUserProfile.companyId).patch(user, where);
+    const password = user?.password;
+
+    delete user.password;
+    let count = await this.companyRepository.users(this.currentUserProfile.companyId).patch(user, {id});
+    if (password) {
+      count = await this.userManagementService.resetPassword(id, password);
+    }
+    return count;
   }
 
   @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserDelete]}})

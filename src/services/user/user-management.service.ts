@@ -11,7 +11,7 @@ import _ from 'lodash';
 import {PasswordHasher} from '../../authorization/hash.password.bcryptjs';
 import {PasswordHasherBindings} from '../../keys';
 import {User, UserWithPassword} from '../../models';
-import {AppFeaturesOneSRepository, Credentials, RolePermissionsRepository, UserRepository, UserRolesRepository} from '../../repositories';
+import {Credentials, RolePermissionsRepository, UserRepository, UserRolesRepository} from '../../repositories';
 
 
 export interface IUserManagementService {
@@ -20,6 +20,7 @@ export interface IUserManagementService {
   convertToUserProfile(tenantId: string, companyName: string, user: User, roles: (string | undefined)[]): Promise<UserProfile>;
   createUser(userWithPassword: UserWithPassword): Promise<User>;
   resetPassword(userId: string, password: string): Promise<Count>;
+  createUserRolesByRoleId(userId: string, roleId: number): Promise<Count>;
 
 }
 
@@ -29,8 +30,6 @@ export class UserManagementService implements IUserManagementService {
     private userRepository: UserRepository,
     @repository(RolePermissionsRepository)
     private rolePermissionsRepository: RolePermissionsRepository,
-    @repository(AppFeaturesOneSRepository)
-    private appFeaturesOneSRepository: AppFeaturesOneSRepository,
     @repository(UserRolesRepository)
     private userRolesRepository: UserRolesRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
@@ -138,8 +137,8 @@ export class UserManagementService implements IUserManagementService {
 
   // assign roles to users using Roles table which is linked to RolePermission
   // you need to pass roleId and userId.
-  private async createUserRolesByRoleId(userId: string, roleId: number) {
-
+  async createUserRolesByRoleId(userId: string, roleId: number): Promise<Count> {
+    let count = 0;
     try {
 
       await this.userRolesRepository.deleteAll({userId})
@@ -154,6 +153,7 @@ export class UserManagementService implements IUserManagementService {
           where: {userId: userId, rolePermissionsId: r.id, appFeaturesOneSId: r.appFeaturesOneSId}
         })
         if (!found) {
+          count += 1;
           await this.userRepository.userRoles(userId).create({
             rolePermissionsId: r.id,
             appFeaturesOneSId: r.appFeaturesOneSId
@@ -163,6 +163,8 @@ export class UserManagementService implements IUserManagementService {
     } catch (e) {
       throw new HttpErrors.UnprocessableEntity("Error Happened while assigning roles");
     }
+
+    return {count};
 
   }
 

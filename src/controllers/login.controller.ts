@@ -1,9 +1,11 @@
 // Uncomment these imports to begin using these cool features!
 
+import {User} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/core';
 import {get, post, requestBody} from '@loopback/rest';
 import {JWTService} from '../authorization';
 import {AuthServiceBindings, CompanyServicesBindings, UserServiceBindings} from '../keys';
+import {Company} from '../models';
 import {Credentials} from '../repositories';
 import {CompanyManagementService, RolesManagementService, UserManagementService} from '../services';
 import {CredentialsRequestBody, TenantInfo, TenantInfoSchema} from '../specs';
@@ -34,6 +36,15 @@ export class LoginController {
                 token: {
                   type: 'string',
                 },
+                user: {
+                  type: User,
+                },
+                company: {
+                  type: Company,
+                },
+                roles: {
+                  type: 'array',
+                }
               },
             },
           },
@@ -43,10 +54,9 @@ export class LoginController {
   })
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<{token: string}> {
+  ): Promise<{token: string, user: User, company: Company, roles: (string | undefined)[]}> {
     // ensure the user exists, and the password is correct
     const user = await this.userManagementService.verifyCredentials(credentials);
-
     // get company details
     const company = await this.companyService.verifyCompanyById(user.companyId);
 
@@ -59,7 +69,7 @@ export class LoginController {
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
 
-    return {token};
+    return {token, user, company, roles};
   }
 
   @get('/login', {
