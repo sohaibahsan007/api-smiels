@@ -55,7 +55,7 @@ export class SignupController {
   async sendConfirmationEmail(
     @requestBody(SignupRequestBody) body: Signup
   ): Promise<void> {
-    await this.signupService.sendConfirmationEmail(body);
+    await this.signupService.prepareConfirmationEmail(body);
   }
 
 

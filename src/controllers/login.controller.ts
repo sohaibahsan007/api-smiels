@@ -54,7 +54,7 @@ export class LoginController {
     const roles = await this.rolesManagementService.getUserRolesByUserId(user.id);
 
     // convert a User object into a UserProfile object (reduced set of properties)
-    const userProfile = await this.userManagementService.convertToUserProfile(company.subDomain, user, roles);
+    const userProfile = await this.userManagementService.convertToUserProfile(company.subDomain, company.name, user, roles);
 
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);

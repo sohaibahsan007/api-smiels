@@ -19,12 +19,12 @@ import {
 } from '@loopback/rest';
 import {SecurityBindings, UserProfile} from '@loopback/security';
 import {PermissionKey} from '../../authorization';
-import {UserServiceBindings} from '../../keys';
+import {EmailManagerBindings, UserServiceBindings} from '../../keys';
 import {
   User, UserWithPassword
 } from '../../models';
 import {CompanyRepository} from '../../repositories';
-import {UserManagementService} from '../../services';
+import {EmailService, UserManagementService} from '../../services';
 
 // parent authenticate.
 @authenticate('jwt')
@@ -34,6 +34,8 @@ export class CompanyUserController {
     @inject(SecurityBindings.USER) protected currentUserProfile: UserProfile,
     @inject(UserServiceBindings.USER_MANAGEMENT)
     protected userManagementService: UserManagementService,
+    @inject(EmailManagerBindings.SEND_MAIL)
+    private emailService: EmailService,
   ) { }
 
   @authenticate({strategy: 'jwt', options: {"required": [PermissionKey.UserReadAll]}})
@@ -77,7 +79,12 @@ export class CompanyUserController {
     }) user: UserWithPassword,
   ): Promise<User> {
     user.companyId = this.currentUserProfile.companyId;
+    const password = user.password;
     const newuser = await this.userManagementService.createUser(user);
+
+    // re-assign password.
+    user.password = password;
+    await this.emailService.sendNewMemberEmail(user);
     return newuser;
   }
 

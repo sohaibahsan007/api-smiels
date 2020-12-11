@@ -4,7 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {inject} from '@loopback/context';
-import {repository} from '@loopback/repository';
+import {Count, repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 import {securityId, UserProfile} from '@loopback/security';
 import _ from 'lodash';
@@ -13,7 +13,17 @@ import {PasswordHasherBindings} from '../../keys';
 import {User, UserWithPassword} from '../../models';
 import {AppFeaturesOneSRepository, Credentials, RolePermissionsRepository, UserRepository, UserRolesRepository} from '../../repositories';
 
-export class UserManagementService {
+
+export interface IUserManagementService {
+  verifyCredentials(credentials: Credentials): Promise<User>;
+  verifyNewUserRequest(user: UserWithPassword): Promise<void>;
+  convertToUserProfile(tenantId: string, companyName: string, user: User, roles: (string | undefined)[]): Promise<UserProfile>;
+  createUser(userWithPassword: UserWithPassword): Promise<User>;
+  resetPassword(userId: string, password: string): Promise<Count>;
+
+}
+
+export class UserManagementService implements IUserManagementService {
   constructor(
     @repository(UserRepository)
     private userRepository: UserRepository,
@@ -78,7 +88,7 @@ export class UserManagementService {
       throw new HttpErrors.Conflict('User with this Email already exist!.');
     }
   }
-  async convertToUserProfile(tenantId: string, user: User, roles: (string | undefined)[]): Promise<UserProfile> {
+  async convertToUserProfile(tenantId: string, companyName: string, user: User, roles: (string | undefined)[]): Promise<UserProfile> {
     // since first name and lastName are optional, no error is thrown if not provided
     let userName = '';
     if (user.firstName) userName = `${user.firstName}`;
@@ -91,6 +101,7 @@ export class UserManagementService {
       name: userName,
       id: user.id,
       companyId: user.companyId,
+      companyName: companyName,
       tenantId: tenantId,
       permissions: roles
 
@@ -99,6 +110,10 @@ export class UserManagementService {
 
   async createUser(userWithPassword: UserWithPassword): Promise<User> {
     await this.verifyNewUserRequest(userWithPassword);
+
+
+    // make admin field false.
+    if (!userWithPassword.isAdmin) userWithPassword.isAdmin = false;
 
     userWithPassword.joinDate = new Date();
     userWithPassword.username = userWithPassword.email.toLowerCase();
@@ -136,7 +151,7 @@ export class UserManagementService {
       );
       for (const r of rolepersmission) {
         const found = await this.userRolesRepository.findOne({
-          where: {rolePermissionsId: r.id, appFeaturesOneSId: r.appFeaturesOneSId}
+          where: {userId: userId, rolePermissionsId: r.id, appFeaturesOneSId: r.appFeaturesOneSId}
         })
         if (!found) {
           await this.userRepository.userRoles(userId).create({
@@ -153,7 +168,7 @@ export class UserManagementService {
 
   // update password
 
-  async resetPassword(userId: string, password: string) {
+  async resetPassword(userId: string, password: string): Promise<Count> {
     const passwordHash = await this.passwordHasher.hashPassword(password);
     return this.userRepository
       .userCredentials(userId)

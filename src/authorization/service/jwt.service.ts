@@ -37,6 +37,7 @@ export class JWTService implements TokenService {
           name: decodedToken.name,
           id: decodedToken.id,
           companyId: decodedToken.companyId,
+          companyName: decodedToken.companyName,
           tenantId: decodedToken.tenantId,
           permissions: decodedToken.permissions
 
@@ -59,6 +60,7 @@ export class JWTService implements TokenService {
       id: userProfile[securityId],
       name: userProfile.name,
       companyId: userProfile.companyId,
+      companyName: userProfile.companyName,
       tenantId: userProfile.tenantId,
       permissions: userProfile.permissions
     };

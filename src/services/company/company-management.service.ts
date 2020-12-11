@@ -9,7 +9,14 @@ import {TenantInfo} from '../../specs';
 import {SignupService} from '../user/signup.service';
 import {UserManagementService} from '../user/user-management.service';
 
-export class CompanyManagementService {
+export interface ICompanyManagementService {
+  validateInfo(company: NewCompanyRequest): Promise<string>;
+  createCompanywithUser(company: NewCompanyRequest): Promise<Company>;
+  verifyCompanyById(id: string): Promise<Company>;
+  getTenantInfo(): Promise<TenantInfo>;
+  validateSubDomain(domain: string): Promise<Count>;
+}
+export class CompanyManagementService implements ICompanyManagementService {
   constructor(
     @repository(CompanyRepository)
     private companyRepository: CompanyRepository,
@@ -24,7 +31,7 @@ export class CompanyManagementService {
   ) { }
 
 
-  async validateInfo(company: NewCompanyRequest) {
+  async validateInfo(company: NewCompanyRequest): Promise<string> {
 
     const verifyInviteToken = await this.signupService.verifyConfirmation(company.inviteToken);
     if (!verifyInviteToken) {
