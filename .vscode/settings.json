@@ -34,5 +34,6 @@
     ".vscode{,/**}"
   ],
   "appService.defaultWebAppToDeploy": "/subscriptions/2aec9261-fabf-4814-a9e2-f5ee5af3ed16/resourceGroups/smiels-apps/providers/Microsoft.Web/sites/api-user-management-smiels",
-  "appService.deploySubpath": "."
+  "appService.deploySubpath": ".",
+  "compile-hero.disable-compile-files-on-did-save-code": false
 }

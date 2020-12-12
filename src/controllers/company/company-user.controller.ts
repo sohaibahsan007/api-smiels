@@ -10,7 +10,6 @@ import {
   del,
   get,
   getModelSchemaRef,
-
   param,
   patch,
   post,

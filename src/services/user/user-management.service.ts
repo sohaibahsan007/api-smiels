@@ -55,6 +55,10 @@ export class UserManagementService implements IUserManagementService {
       throw new HttpErrors.Unauthorized('user is not active');
     }
 
+    if (foundUser.isDeleted) {
+      throw new HttpErrors.Unauthorized('user not found.');
+    }
+
     const credentialsFound = await this.userRepository.findCredentials(
       foundUser.id,
     );

@@ -35,9 +35,10 @@ export class CompanyRepository extends DefaultCrudRepository<
     try {
       const user = await this.users(companyId).find({where: {id: userId}});
       if (user) {
-        user[0].isDeleted = true;
-        await this.users(companyId).patch(user[0]);
-        return {count: user.length};
+        const currentuser = user[0];
+        currentuser.isDeleted = true;
+        await this.users(companyId).patch(currentuser, {id: userId});
+        return {count: 1};
       } else return {count: 0};
     } catch (err) {
       if (err.code === 'ENTITY_NOT_FOUND') {

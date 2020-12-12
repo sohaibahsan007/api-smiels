@@ -119,16 +119,19 @@ export class User extends Entity {
 
   @property({
     type: 'boolean',
+    default: true,
   })
   isActive?: boolean;
 
   @property({
     type: 'boolean',
+    default: false,
   })
   isAdmin?: boolean;
 
   @property({
     type: 'boolean',
+    default: false,
   })
   isDeleted?: boolean;
 
