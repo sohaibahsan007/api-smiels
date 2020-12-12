@@ -5,7 +5,7 @@ exports.environment = void 0;
 exports.environment = {
     noreplyEmail: 'noreply@smiels.com',
     supportEmail: 'support@smiels.com',
-    isDevelopment: (_a = process.env.PRODUCTION) !== null && _a !== void 0 ? _a : true,
+    isDevelopment: (_a = process.env.NODE_ENV) !== null && _a !== void 0 ? _a : true,
     webUrl: (_b = process.env.WEBURL) !== null && _b !== void 0 ? _b : 'localhost:4200/#/',
     sendGridKey: (_c = process.env.SENDGRIDKEY) !== null && _c !== void 0 ? _c : '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',
     jwt: {
